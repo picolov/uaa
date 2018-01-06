@@ -1,0 +1,6 @@
+<html th:inline="text" th:remove="tag">
+[[#{sms.activation.text1}]]
+[[${#strings.substring(user.activationKey,4,8)}]]
+[[#{sms.activation.text2}]]
+[[#{sms.signature}]]
+</html>

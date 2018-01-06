@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+
+    <!--
+        Added the entity Menu.
+    -->
+    <changeSet id="20171203161117-3" author="jhipster">
+        <createTable tableName="menu">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="parent" type="varchar(36)">
+                <constraints nullable="true" />
+            </column>
+            <column name="idx" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="description" type="varchar">
+                <constraints nullable="true" />
+            </column>
+            <column name="icon" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="url" type="varchar">
+                <constraints nullable="true" />
+            </column>
+            <column name="active_when_url" type="varchar">
+                <constraints nullable="true" />
+            </column>
+
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+        <createTable tableName="authority_menu">
+            <column name="authority_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="menu_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="authority_name, menu_id" tableName="authority_menu"/>
+
+        <addForeignKeyConstraint baseColumnNames="authority_name"
+                                 baseTableName="authority_menu"
+                                 constraintName="fk_authority_name"
+                                 referencedColumnNames="name"
+                                 referencedTableName="jhi_authority"/>
+        <addForeignKeyConstraint baseColumnNames="menu_id"
+                                 baseTableName="authority_menu"
+                                 constraintName="fk_menu_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="menu"/>
+
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+</databaseChangeLog>
