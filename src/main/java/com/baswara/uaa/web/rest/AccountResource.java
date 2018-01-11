@@ -162,8 +162,8 @@ public class AccountResource {
     @Timed
     public Map<String, Object> getAccount() {
         Map<String, Object> account = new HashMap<>();
-        User user = userService.getUserWithAuthorities().get();
-        if (user != null) {
+        if (userService.getUserWithAuthorities().isPresent()) {
+            User user = userService.getUserWithAuthorities().get();
             account.put("id", user.getId());
             account.put("login", user.getLogin());
             account.put("firstName", user.getFirstName());
