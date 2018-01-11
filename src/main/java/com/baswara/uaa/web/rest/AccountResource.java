@@ -72,7 +72,7 @@ public class AccountResource {
     @PostMapping("/register")
     @Timed
     @ResponseStatus(HttpStatus.CREATED)
-    public String registerAccount(@RequestBody Map<String, String> params) {
+    public ResponseEntity<Object> registerAccount(@RequestBody Map<String, String> params) {
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setLogin(params.get("login"));
         managedUserVM.setEmail(params.get("email"));
@@ -120,7 +120,7 @@ public class AccountResource {
         }
         mailService.sendActivationEmail(user);
         smsService.sendActivationSms(user);
-        return user.getLogin();
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     /**
