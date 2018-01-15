@@ -235,20 +235,20 @@ public class UserService {
         return Optional.of(userRepository
             .findOne(userDTO.getId()))
             .map(user -> {
-                user.setLogin(userDTO.getLogin());
-                user.setFirstName(userDTO.getFirstName());
-                user.setLastName(userDTO.getLastName());
-                user.setEmail(userDTO.getEmail());
-                user.setMobile(userDTO.getMobile());
-                user.setImageUrl(userDTO.getImageUrl());
-                user.setActivated(userDTO.isActivated());
-                user.setTermAgreed(userDTO.isTermAgreed());
-                user.setLangKey(userDTO.getLangKey());
-                Set<Authority> managedAuthorities = user.getAuthorities();
-                managedAuthorities.clear();
-                userDTO.getAuthorities().stream()
-                    .map(authorityRepository::findOne)
-                    .forEach(managedAuthorities::add);
+                if (userDTO.getLogin() != null) user.setLogin(userDTO.getLogin());
+                if (userDTO.getFirstName() != null) user.setFirstName(userDTO.getFirstName());
+                if (userDTO.getLastName() != null) user.setLastName(userDTO.getLastName());
+                if (userDTO.getEmail() != null) user.setEmail(userDTO.getEmail());
+                if (userDTO.getMobile() != null) user.setMobile(userDTO.getMobile());
+                if (userDTO.getImageUrl() != null) user.setImageUrl(userDTO.getImageUrl());
+                if (userDTO.getLangKey() != null) user.setLangKey(userDTO.getLangKey());
+                if (userDTO.getAuthorities() != null) {
+                    Set<Authority> managedAuthorities = user.getAuthorities();
+                    managedAuthorities.clear();
+                    userDTO.getAuthorities().stream()
+                        .map(authorityRepository::findOne)
+                        .forEach(managedAuthorities::add);
+                }
                 cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
                 log.debug("Changed Information for User: {}", user);
                 return user;
