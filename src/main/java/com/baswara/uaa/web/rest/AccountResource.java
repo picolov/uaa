@@ -235,6 +235,13 @@ public class AccountResource {
         return new ResponseEntity<>(new HashMap<String, Object>(), HttpStatus.OK);
     }
 
+    @PostMapping(path = "/account/setActive")
+    @Timed
+    public ResponseEntity<Object> setActive(@RequestParam(value = "login") String login, @RequestParam(value = "active") boolean active) {
+        userService.setUserActive(login, active);
+        return new ResponseEntity<>(new HashMap<String, Object>(), HttpStatus.OK);
+    }
+
     /**
      * POST  /account/change-password : changes the current user's password
      *

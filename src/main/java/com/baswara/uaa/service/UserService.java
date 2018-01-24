@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -254,6 +255,16 @@ public class UserService {
                 return user;
             })
             .map(UserDTO::new);
+    }
+
+    public void setUserActive(String login, boolean active) {
+        Optional<User> userExist = userRepository.findOneByLogin(login);
+        if (userExist.isPresent()) {
+            User user = userExist.get();
+            user.setActivated(active);
+            cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+            userRepository.save(user);
+        }
     }
 
     public void setTermAgreed(boolean agreed) {
